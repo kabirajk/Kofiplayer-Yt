@@ -143,7 +143,6 @@ class KofiSearch(Search):
         return videos, next_continuation
 
 
-
 def getFromYoutube(query):
     searchresults=KofiSearch(query);
     
@@ -158,13 +157,18 @@ def ytsuggest():
 
 @app.route('/query')
 def querySearch():
-    keyword=request.args.get('keyword', default = 1, type = str)
-    
-    return 'Hello, World!'
+    url=request.args.get('yturl')
+    yt=YouTube(url)
+    streams=yt.streams;
+    aud={'title':""+streams.filter(only_audio=True).first().title,'downloadlinks':{},'thumbnail':yt.thumbnail_url}
+    # streams.filter(only_audio=True).first()
+    for audioObj in streams.filter(only_audio=True):
+        aud['downloadlinks'][''+str(audioObj.abr)]=audioObj.url
+    return jsonify({'respose':aud})
 
 @app.route('/search/songs')
 def searchsong():
-    keyword=request.args.get('keyword', default = 1, type = str)
+    keyword=request.args.get('keyword', default = 1)
     query=KofiSearch(keyword)
     responseDict={'response':[]};
     queryl=dict()
