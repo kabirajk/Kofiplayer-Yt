@@ -148,14 +148,19 @@ def getFromYoutube(query):
     
 @app.route('/')
 def home():
-    return 'Hello, World!'
+    return """
+    <span>/ytsuggest?keyword=</span>
+    <span>/query/audio/?yturl=</span>
+    <span>/query/video/?yturl=</span>
+    <span>/search/songs?keyword=</span>
+    """
 @app.route('/ytsuggest')
 def ytsuggest():
     keyword=request.args.get('keyword', default = 1, type = str)
     query=KofiSearch(keyword)
     return jsonify({'suggested':query.completion_suggestions})
 
-@app.route('/query')
+@app.route('/query/audio')
 def querySearch():
     url=request.args.get('yturl')
     yt=YouTube(url)
@@ -185,9 +190,16 @@ def searchsong():
         responseDict['response'].append(aud)
     return jsonify({'responses':responseDict})
 
-@app.route('/search/video')
+@app.route('/query/video')
 def searchvideo():
-    return 'Hello, World!'
+    url=request.args.get('yturl')
+    yt=YouTube(url)
+    streams=yt.streams;
+    aud={'title':""+streams.filter(only_audio=True).first().title,'downloadlinks':{},'thumbnail':yt.thumbnail_url}
+    streams.filter(progressive=False).first().video_codec
+    for audioObj in streams.filter():
+        aud['downloadlinks'][''+str(audioObj.video_codec)]=audioObj.url
+    return jsonify({'respose':aud})
 
 
 @app.route('/test' , methods=['GET'])
