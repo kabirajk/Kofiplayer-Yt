@@ -1,6 +1,6 @@
 from flask import Flask, render_template , request , jsonify
 from pytube import YouTube,Search
-from api.app import KofiSearch
+from kofisearch.app import KofiSearch
 import logging
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
