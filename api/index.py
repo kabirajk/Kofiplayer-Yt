@@ -1,6 +1,6 @@
 from flask import Flask, render_template , request , jsonify
 from pytube import YouTube,Search
-from app import KofiSearch
+from api.app import KofiSearch
 import logging
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
@@ -65,4 +65,4 @@ def after_request(response):
 def about():
     return 'About'
 
-app.run(debug=True)
+# app.run(debug=True)
