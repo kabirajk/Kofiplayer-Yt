@@ -196,9 +196,9 @@ def searchvideo():
     yt=YouTube(url)
     streams=yt.streams;
     aud={'title':""+streams.filter(only_audio=True).first().title,'downloadlinks':{},'thumbnail':yt.thumbnail_url}
-    streams.filter(progressive=False).first().video_codec
+    #streams.filter(progressive=False).first().video_codec
     for audioObj in streams.filter():
-        aud['downloadlinks'][''+str(audioObj.video_codec)]=audioObj.url
+        aud['downloadlinks'][''+str(audioObj.res)]=audioObj.url
     return jsonify({'respose':aud})
 
 
